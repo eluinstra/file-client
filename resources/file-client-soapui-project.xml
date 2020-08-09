@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<con:soapui-project id="0098e419-90fd-43ef-b5be-2a3cf92debe9" activeEnvironment="Default" name="file-client" resourceRoot="" soapui-version="5.5.0" xmlns:con="http://eviware.com/soapui/config"><con:settings/><con:interface xsi:type="con:WsdlInterface" id="2a5143ba-9a63-4a33-8172-b1c07a4c05b4" wsaVersion="NONE" name="FileServiceImplServiceSoapBinding" type="wsdl" bindingName="{http://service.core.fc.luin.dev/}FileServiceImplServiceSoapBinding" soapVersion="1_1" anonymous="optional" definition="http://localhost:8080/service/file?wsdl" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:settings/><con:definitionCache type="TEXT" rootPart="http://localhost:8080/service/file?wsdl"><con:part><con:url>http://localhost:8080/service/file?wsdl</con:url><con:content><![CDATA[<wsdl:definitions name="FileServiceImplService" targetNamespace="http://service.core.fc.luin.dev/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://service.core.fc.luin.dev/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:ns2="http://schemas.xmlsoap.org/soap/http" xmlns:ns1="http://luin.dev/fc/core/1.0">
+  <wsdl:import location="http://localhost:8080/service/file?wsdl=FileService.wsdl" namespace="http://luin.dev/fc/core/1.0"></wsdl:import>
+  <wsdl:binding name="FileServiceImplServiceSoapBinding" type="ns1:FileService">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="getFileInfo">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="getFileInfo">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getFileInfoResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="ServiceException">
+        <soap:fault name="ServiceException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="deleteFile">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="deleteFile">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="deleteFileResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="ServiceException">
+        <soap:fault name="ServiceException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="downloadFile">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="downloadFile">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="downloadFileResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="ServiceException">
+        <soap:fault name="ServiceException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="uploadFile">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="uploadFile">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="uploadFileResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="ServiceException">
+        <soap:fault name="ServiceException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="FileServiceImplService">
+    <wsdl:port binding="tns:FileServiceImplServiceSoapBinding" name="FileServiceImplPort">
+      <soap:address location="http://localhost:8080/service/file"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>]]></con:content><con:type>http://schemas.xmlsoap.org/wsdl/</con:type></con:part><con:part><con:url>http://localhost:8080/service/file?wsdl=FileService.wsdl</con:url><con:content><![CDATA[<wsdl:definitions name="FileService" targetNamespace="http://luin.dev/fc/core/1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ns1="http://luin.dev/fc/core/1.0">
+  <wsdl:types>
+    <xs:schema attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="http://luin.dev/fc/core/1.0" version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://luin.dev/fc/core/1.0">
+      <xs:element name="deleteFile" type="tns:deleteFile"/>
+      <xs:element name="deleteFileResponse" type="tns:deleteFileResponse"/>
+      <xs:element name="downloadFile" type="tns:downloadFile"/>
+      <xs:element name="downloadFileResponse" type="tns:downloadFileResponse"/>
+      <xs:element name="file" type="tns:file"/>
+      <xs:element name="fileInfo" type="tns:fileInfo"/>
+      <xs:element name="getFileInfo" type="tns:getFileInfo"/>
+      <xs:element name="getFileInfoResponse" type="tns:getFileInfoResponse"/>
+      <xs:element name="uploadFile" type="tns:uploadFile"/>
+      <xs:element name="uploadFileResponse" type="tns:uploadFileResponse"/>
+      <xs:complexType name="getFileInfo">
+        <xs:sequence/>
+      </xs:complexType>
+      <xs:complexType name="getFileInfoResponse">
+        <xs:sequence>
+          <xs:element maxOccurs="unbounded" minOccurs="0" name="fileInfo" type="tns:fileInfo"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="fileInfo">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="id" type="xs:long"/>
+          <xs:element name="url" type="xs:string"/>
+          <xs:element name="name" type="xs:string"/>
+          <xs:element name="contentType" type="xs:string"/>
+          <xs:element name="md5Checksum" type="xs:string"/>
+          <xs:element name="sha256Checksum" type="xs:string"/>
+          <xs:element minOccurs="0" name="startDate" type="xs:dateTime"/>
+          <xs:element minOccurs="0" name="endDate" type="xs:dateTime"/>
+          <xs:element name="userId" type="xs:long"/>
+          <xs:element name="length" type="xs:long"/>
+          <xs:element name="lastModified" type="xs:dateTime"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="deleteFile">
+        <xs:sequence>
+          <xs:element name="id" type="xs:long"/>
+          <xs:element minOccurs="0" name="force" type="xs:boolean"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="deleteFileResponse">
+        <xs:sequence/>
+      </xs:complexType>
+      <xs:complexType name="downloadFile">
+        <xs:sequence>
+          <xs:element name="id" type="xs:long"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="downloadFileResponse">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="file" type="tns:file"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="file">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="id" type="xs:long"/>
+          <xs:element name="name" type="xs:string"/>
+          <xs:element name="contentType" type="xs:string"/>
+          <xs:element minOccurs="0" name="sha256Checksum" type="xs:string"/>
+          <xs:element minOccurs="0" name="startDate" type="xs:dateTime"/>
+          <xs:element minOccurs="0" name="endDate" type="xs:dateTime"/>
+          <xs:element name="content" type="xs:base64Binary"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="uploadFile">
+        <xs:sequence>
+          <xs:element name="file" type="tns:file"/>
+          <xs:element name="uploadUrl" type="xs:string"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="uploadFileResponse">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="id" type="xs:long"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:element name="ServiceException" type="tns:ServiceException"/>
+      <xs:complexType name="ServiceException">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="message" type="xs:string"/>
+        </xs:sequence>
+      </xs:complexType>
+    </xs:schema>
+  </wsdl:types>
+  <wsdl:message name="getFileInfoResponse">
+    <wsdl:part element="ns1:getFileInfoResponse" name="parameters"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="ServiceException">
+    <wsdl:part element="ns1:ServiceException" name="ServiceException"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="downloadFileResponse">
+    <wsdl:part element="ns1:downloadFileResponse" name="parameters"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="deleteFile">
+    <wsdl:part element="ns1:deleteFile" name="parameters"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="downloadFile">
+    <wsdl:part element="ns1:downloadFile" name="parameters"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="deleteFileResponse">
+    <wsdl:part element="ns1:deleteFileResponse" name="parameters"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="uploadFile">
+    <wsdl:part element="ns1:uploadFile" name="parameters"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="uploadFileResponse">
+    <wsdl:part element="ns1:uploadFileResponse" name="parameters"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getFileInfo">
+    <wsdl:part element="ns1:getFileInfo" name="parameters"></wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="FileService">
+    <wsdl:operation name="getFileInfo">
+      <wsdl:input message="ns1:getFileInfo" name="getFileInfo"></wsdl:input>
+      <wsdl:output message="ns1:getFileInfoResponse" name="getFileInfoResponse"></wsdl:output>
+      <wsdl:fault message="ns1:ServiceException" name="ServiceException"></wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="deleteFile">
+      <wsdl:input message="ns1:deleteFile" name="deleteFile"></wsdl:input>
+      <wsdl:output message="ns1:deleteFileResponse" name="deleteFileResponse"></wsdl:output>
+      <wsdl:fault message="ns1:ServiceException" name="ServiceException"></wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="downloadFile">
+      <wsdl:input message="ns1:downloadFile" name="downloadFile"></wsdl:input>
+      <wsdl:output message="ns1:downloadFileResponse" name="downloadFileResponse"></wsdl:output>
+      <wsdl:fault message="ns1:ServiceException" name="ServiceException"></wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="uploadFile">
+      <wsdl:input message="ns1:uploadFile" name="uploadFile"></wsdl:input>
+      <wsdl:output message="ns1:uploadFileResponse" name="uploadFileResponse"></wsdl:output>
+      <wsdl:fault message="ns1:ServiceException" name="ServiceException"></wsdl:fault>
+    </wsdl:operation>
+  </wsdl:portType>
+</wsdl:definitions>]]></con:content><con:type>http://schemas.xmlsoap.org/wsdl/</con:type></con:part></con:definitionCache><con:endpoints><con:endpoint>http://localhost:8000/service/file</con:endpoint></con:endpoints><con:operation id="0f7bbe2b-d204-48d9-9715-5e15c12fea66" isOneWay="false" action="" name="deleteFile" bindingOperationName="deleteFile" type="Request-Response" outputName="deleteFileResponse" inputName="deleteFile" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call id="c488294b-800c-4d82-afad-b835f9615d23" name="Request 1"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8000/service/file</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ns="http://luin.dev/fc/core/1.0">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <ns:deleteFile>
+         <id>?</id>
+         <!--Optional:-->
+         <force>?</force>
+      </ns:deleteFile>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://service.core.fc.luin.dev/FileService/deleteFile"/></con:call></con:operation><con:operation id="ee906a23-ac79-4abc-b1b2-aaf50d3e22de" isOneWay="false" action="" name="downloadFile" bindingOperationName="downloadFile" type="Request-Response" outputName="downloadFileResponse" inputName="downloadFile" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call id="12499c71-f5c1-4819-9758-46a1de5f765a" name="Request 1"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8000/service/file</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ns="http://luin.dev/fc/core/1.0">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <ns:downloadFile>
+         <id>?</id>
+      </ns:downloadFile>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://service.core.fc.luin.dev/FileService/downloadFile"/></con:call></con:operation><con:operation id="eb7be750-936c-4eea-b8fe-c7efce47ef52" isOneWay="false" action="" name="getFileInfo" bindingOperationName="getFileInfo" type="Request-Response" outputName="getFileInfoResponse" inputName="getFileInfo" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call id="eae12b4b-266c-46d5-b1ed-9bc04ace63b1" name="Request 1"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8000/service/file</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ns="http://luin.dev/fc/core/1.0">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <ns:getFileInfo/>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://service.core.fc.luin.dev/FileService/getFileInfo"/></con:call></con:operation><con:operation id="25e4306e-0546-4f57-82c9-9ac7b19569d6" isOneWay="false" action="" name="uploadFile" bindingOperationName="uploadFile" type="Request-Response" outputName="uploadFileResponse" inputName="uploadFile" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call id="49581f94-79e9-4135-8b1b-5d60c6236330" name="Request 1"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting><con:setting id="WsdlSettings@enable-mtom">true</con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8000/service/file</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ns="http://luin.dev/fc/core/1.0">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <ns:uploadFile>
+         <file>
+            <name>hsqldb.create.sql</name>
+            <contentType>plain/text</contentType>
+            <content>cid:1118184843927</content>
+         </file>
+         <uploadUrl>https://localhost:8443/files/upload</uploadUrl>
+      </ns:uploadFile>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:attachment><con:name>hsqldb.create.sql</con:name><con:contentType>application/octet-stream</con:contentType><con:size>1360</con:size><con:contentId>1118184843927</con:contentId><con:part>1118184843927</con:part><con:url>/home/edwin/gb/fs-core/resources/ssl/hsqldb.create.sql</con:url><con:data>UEsDBBQACAgIAGp+CVEAAAAAAAAAAAAAAAARAAAAaHNxbGRiLmNyZWF0ZS5zcWyNVFtv4joYfC4S/8HiqZWaawm0LI0UGjekSwM1Trf05cgkDnEbEtZxYPn364RWVO05Os2DL8p84/F8I48xnmmGagBT74EZ4YKRDNwUuaC5aLdcIugA4IqeA9MAd1UmYaYuh4FuDLo68O5xu/WGVvB+I8GbjLBcE/SPOP5BJF/JX8u9oCXQFdOytF6//6GSk7xMKFdgHhUxy1cSy3LC90fIhOYrkQ6AafXarTnlW8oH4I4KsT+9Urvqha5ua2l6zzDO2i1Zh6CDIcDOaAJBlLHmOqft1gmLT94+P8DQg6hZezCASBa4YLQALrx1wgkGzhz4Lgywjxdghvx7By3AT7g4lyw5WdM3mkcH3YwddCqVnZ2cBFMMgnAyAWHgP4SwxkZUupqwSHpZ40eT6ehQ+Y5tt85+fNGcsIweFG8ZFxXJ/tkQkf73eZ8Ejt/7auk6OPgFIOcF/57rJEqpUgN5kQ3AuiqFwumWZCyWtzjPCyWqEfWiFAWnn0NQt19LxTr7EaWEl1Rcs7JQLi+tK8X42tNe/3s9HdaMtpwoieW0poKAVIiNQn9XbHvd+aihA6LD7rrzVUwlEuWyo0kOwURG7caYximWl1Uie1Xn5Z0B7DgTcjHUDujWUHtTsCzivT1MTbt2G0CEpugbLBIvDybLhkpweyhSO0T+QPKnchPbWt37Urt4uLxaG6/sqbtfuY/9cHRv7F+W5uzZi3svF8jtvTws6c/y9/ruNV49r9GSlP7YhX0L5Tu8DX4l+Jf7ZBIU7GavKXvmQfdm4y2SxJ8j7t3RygxDMbbiuZF08Ur3zGmX+6/TZ+/m9qkM0vhR6oltOfCjzDl2cDg/KpWX/RfUPZzPHQ8eYf/j6pdTIHqcQHysj+lWzSqWq0mpRjJuatmEpZkyKlS32OVZQWKlb0VWjy6vPpJq71ankl0GhtPkulPHZqBpVL4Mm5KqBV9pL3XwOvas2FFOY/lYHaIoUeBzGocakW3nMkCSvglBnYkmnH8BUEsHCBenrqjvAgAAUAUAAFBLAQIUABQACAgIAGp+CVEXp66o7wIAAFAFAAARAAAAAAAAAAAAAAAAAAAAAABoc3FsZGIuY3JlYXRlLnNxbFBLBQYAAAAAAQABAD8AAAAuAwAAAAA=</con:data><con:id>5f6f9bab-b571-4939-a533-7490c99609aa</con:id></con:attachment><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://service.core.fc.luin.dev/FileService/uploadFile"/><con:wsrmConfig version="1.2"/></con:call></con:operation></con:interface><con:properties/><con:wssContainer/><con:oAuth2ProfileContainer/><con:oAuth1ProfileContainer/></con:soapui-project>

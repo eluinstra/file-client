@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package dev.luin.fs;
+package dev.luin.fc;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -22,36 +22,34 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 
-import dev.luin.fs.core.datasource.DataSourceConfig;
-import dev.luin.fs.core.file.FileSystemConfig;
-import dev.luin.fs.core.querydsl.QueryDSLConfig;
-import dev.luin.fs.core.server.download.DownloadServerConfig;
-import dev.luin.fs.core.server.upload.UploadServerConfig;
-import dev.luin.fs.core.service.ServiceConfig;
-import dev.luin.fs.core.transaction.TransactionManagerConfig;
-import dev.luin.fs.core.user.UserManagerConfig;
-import dev.luin.fs.web.WebConfig;
+import dev.luin.fc.core.datasource.DataSourceConfig;
+import dev.luin.fc.core.download.DownloadClientConfig;
+import dev.luin.fc.core.file.FileSystemConfig;
+import dev.luin.fc.core.querydsl.QueryDSLConfig;
+import dev.luin.fc.core.service.ServiceConfig;
+import dev.luin.fc.core.transaction.TransactionManagerConfig;
+import dev.luin.fc.core.upload.UploadClientConfig;
+import dev.luin.fc.web.WebConfig;
 import lombok.AccessLevel;
 import lombok.val;
 import lombok.experimental.FieldDefaults;
 
 @Configuration
 @Import({
-	UserManagerConfig.class,
 	DataSourceConfig.class,
-	DownloadServerConfig.class,
+	DownloadClientConfig.class,
 	FileSystemConfig.class,
 	QueryDSLConfig.class,
 	ServiceConfig.class,
 	TransactionManagerConfig.class,
-	UploadServerConfig.class,
+	UploadClientConfig.class,
 	WebConfig.class
 })
 @PropertySource(value = {
-		"classpath:dev/luin/fs/core/default.properties",
-		"classpath:dev/luin/fs/default.properties",
-		"file:${fs.configDir}fs-service.advanced.properties",
-		"file:${fs.configDir}fs-service.properties"},
+		"classpath:dev/luin/fc/core/default.properties",
+		"classpath:dev/luin/fc/default.properties",
+		"file:${fc.configDir}file-client.advanced.properties",
+		"file:${fc.configDir}file-client.properties"},
 		ignoreResourceNotFound = true)
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class AppConfig
@@ -61,12 +59,12 @@ public class AppConfig
 	private static PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer()
 	{
 		val result = new PropertySourcesPlaceholderConfigurer();
-		val configDir = System.getProperty("fs.configDir");
+		val configDir = System.getProperty("fc.configDir");
 		val resources = new Resource[]{
-				new ClassPathResource("dev/luin/fs/core/default.properties"),
-				new ClassPathResource("dev/luin/fs/default.properties"),
-				new FileSystemResource(configDir + "fs-service.advanced.properties"),
-				new FileSystemResource(configDir + "fs-service.properties")};
+				new ClassPathResource("dev/luin/fc/core/default.properties"),
+				new ClassPathResource("dev/luin/fc/default.properties"),
+				new FileSystemResource(configDir + "file-client.advanced.properties"),
+				new FileSystemResource(configDir + "file-client.properties")};
 		result.setLocations(resources);
 		result.setIgnoreResourceNotFound(true);
 		return result;

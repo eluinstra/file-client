@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package dev.luin.fs.web;
+package dev.luin.fc.web;
 
 import java.util.Collections;
 
@@ -27,14 +27,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import dev.luin.fs.core.service.FileService;
+import dev.luin.fc.core.service.FileService;
 import lombok.AccessLevel;
 import lombok.val;
 import lombok.experimental.FieldDefaults;
 
 @Configuration
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class GBWebConfig
+public class WebConfig
 {
 	@Autowired
 	FileService fileService;
