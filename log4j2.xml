@@ -22,8 +22,8 @@
 			<PatternLayout pattern="%d [%t] %-5p %c - %m%n" />
 		</Console>
 		<RollingFile name="File" 
-			fileName="logs/fs-service.log"
-			filePattern="logs/fs-service-%d{yyyy-MM-dd}.log">
+			fileName="logs/file-client.log"
+			filePattern="logs/file-client-%d{yyyy-MM-dd}.log">
 			<PatternLayout pattern="%d [%t] %-5p %c - %m%n" />
 			<Policies>
 				<TimeBasedTriggeringPolicy interval="1"/>
@@ -34,10 +34,10 @@
 		<AsyncRoot level="INFO">
 			<AppenderRef ref="Console" />
 		</AsyncRoot>
-		<AsyncLogger name="dev.luin.fc" level="INFO" />
-		<AsyncLogger name="dev.luin.fc.core" level="INFO" />
-		<AsyncLogger name="dev.luin.fc.core.download" level="DEBUG" />
-		<AsyncLogger name="dev.luin.fc.core.upload" level="DEBUG" />
+		<AsyncLogger name="dev.luin.file.client" level="INFO" />
+		<AsyncLogger name="dev.luin.file.client.core" level="INFO" />
+		<AsyncLogger name="dev.luin.file.client.core.download" level="DEBUG" />
+		<AsyncLogger name="dev.luin.file.client.core.upload" level="DEBUG" />
 		<AsyncLogger name="org.springframework.beans.factory" level="WARN" />
 		<AsyncLogger name="org.springframework.jdbc" level="WARN" />
 	</Loggers>

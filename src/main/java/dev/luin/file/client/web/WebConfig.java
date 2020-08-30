@@ -13,10 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package dev.luin.fc.web;
+package dev.luin.file.client.web;
 
 import java.util.Collections;
 
+import javax.xml.namespace.QName;
 import javax.xml.ws.Endpoint;
 import javax.xml.ws.soap.SOAPBinding;
 
@@ -27,7 +28,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import dev.luin.fc.core.service.FileService;
+import dev.luin.file.client.core.service.FileService;
 import lombok.AccessLevel;
 import lombok.val;
 import lombok.experimental.FieldDefaults;
@@ -42,7 +43,7 @@ public class WebConfig
 	@Bean
 	public Endpoint fileServiceEndpoint()
 	{
-		val result = publishEndpoint(fileService,"/file");
+		val result = publishEndpoint(fileService,"/file","http://luin.dev/file/client/1.0","FileService","FileServicePort");
 		((SOAPBinding)result.getBinding()).setMTOMEnabled(true);
 		return result;
 	}
@@ -57,10 +58,12 @@ public class WebConfig
 		return result;
 	}
 
-	private Endpoint publishEndpoint(Object service, String address)
+	private Endpoint publishEndpoint(Object service, String address, String namespaceUri, String serviceName, String endpointName)
 	{
 		val result = new EndpointImpl(cxf(),service);
 		result.setAddress(address);
+		result.setServiceName(new QName(namespaceUri,serviceName));
+		result.setEndpointName(new QName(namespaceUri,endpointName));
 		result.publish();
 		return result;
 	}

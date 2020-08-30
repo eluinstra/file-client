@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package dev.luin.fc.web;
+package dev.luin.file.client.web;
 
 import java.util.Collections;
 
@@ -27,7 +27,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import dev.luin.fc.core.service.FileService;
+import dev.luin.file.client.core.service.FileService;
 import lombok.AccessLevel;
 import lombok.val;
 import lombok.experimental.FieldDefaults;

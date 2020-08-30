@@ -1,4 +1,19 @@
 /**
+ * Copyright 2020 E.Luinstra
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+/**
 s * Copyright 2020 E.Luinstra
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,7 +28,7 @@ s * Copyright 2020 E.Luinstra
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package dev.luin.fc;
+package dev.luin.file.client;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -72,9 +87,9 @@ import org.hsqldb.server.ServiceProperties;
 import org.springframework.web.context.ContextLoaderListener;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 
-import dev.luin.fc.common.SecurityUtils;
-import dev.luin.fc.core.security.KeyStoreType;
-import dev.luin.fc.web.configuration.JdbcURL;
+import dev.luin.file.client.common.SecurityUtils;
+import dev.luin.file.client.core.security.KeyStoreType;
+import dev.luin.file.client.web.configuration.JdbcURL;
 import lombok.AccessLevel;
 import lombok.val;
 import lombok.experimental.FieldDefaults;
@@ -180,7 +195,7 @@ public class Start
 	protected void init(CommandLine cmd)
 	{
 		val configDir = cmd.getOptionValue("configDir","");
-		System.setProperty("fs.configDir",configDir);
+		System.setProperty("configDir",configDir);
 		System.out.println("Using config directory: " + configDir);
 	}
 
@@ -206,9 +221,9 @@ public class Start
 
 	protected Optional<JdbcURL> getHsqlDbJdbcUrl(CommandLine cmd, Properties properties) throws IOException, AclFormatException, URISyntaxException
 	{
-		if ("org.hsqldb.jdbcDriver".equals(properties.getProperty("fc.jdbc.driverClassName")) && cmd.hasOption("hsqldb"))
+		if ("org.hsqldb.jdbcDriver".equals(properties.getProperty("jdbc.driverClassName")) && cmd.hasOption("hsqldb"))
 		{
-			val jdbcURL = dev.luin.fc.web.configuration.Utils.parseJdbcURL(properties.getProperty("fc.jdbc.url"),new JdbcURL());
+			val jdbcURL = dev.luin.file.client.web.configuration.Utils.parseJdbcURL(properties.getProperty("jdbc.url"),new JdbcURL());
 			if (!jdbcURL.getHost().matches("(localhost|127.0.0.1)"))
 			{
 				System.out.println("Cannot start server on " + jdbcURL.getHost());
@@ -456,7 +471,7 @@ public class Start
 
 	protected FilterHolder createClientCertificateManagerFilterHolder(CommandLine cmd)
 	{
-		val result = new FilterHolder(dev.luin.fc.core.server.servlet.ClientCertificateManagerFilter.class); 
+		val result = new FilterHolder(dev.luin.file.client.core.server.servlet.ClientCertificateManagerFilter.class); 
 		result.setInitParameter("x509CertificateHeader",cmd.getOptionValue("clientCertificateHeader"));
 		return result;
 	}
@@ -464,7 +479,7 @@ public class Start
 	protected FilterHolder createClientCertificateAuthenticationFilterHolder(CommandLine cmd) throws MalformedURLException, IOException
 	{
 		System.out.println("Configuring web server client certificate authentication:");
-		val result = new FilterHolder(dev.luin.fc.core.service.servlet.ClientCertificateAuthenticationFilter.class); 
+		val result = new FilterHolder(dev.luin.file.client.core.service.servlet.ClientCertificateAuthenticationFilter.class); 
 		val clientTrustStoreType = cmd.getOptionValue("clientTrustStoreType",DEFAULT_KEYSTORE_TYPE);
 		val clientTrustStorePath = cmd.getOptionValue("clientTrustStorePath");
 		val clientTrustStorePassword = cmd.getOptionValue("clientTrustStorePassword");
@@ -496,8 +511,8 @@ public class Start
 
 	protected FilterHolder createClientCertificateManagerFilterHolder(Properties properties)
 	{
-		val result = new FilterHolder(dev.luin.fc.core.server.servlet.ClientCertificateManagerFilter.class); 
-		result.setInitParameter("x509CertificateHeader",properties.getProperty("https.clientCertificateHeader"));
+		val result = new FilterHolder(dev.luin.file.client.core.server.servlet.ClientCertificateManagerFilter.class); 
+		result.setInitParameter("x509CertificateHeader",properties.getProperty("server.clientCertificateHeader"));
 		return result;
 	}
 

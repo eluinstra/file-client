@@ -13,21 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package dev.luin.fc.web.configuration;
+package dev.luin.file.client.common;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.experimental.FieldDefaults;
+import java.io.UnsupportedEncodingException;
+import java.security.NoSuchAlgorithmException;
 
-@Data
-@FieldDefaults(level = AccessLevel.PRIVATE)
-@NoArgsConstructor
-@AllArgsConstructor
-public class JdbcURL
+import org.apache.commons.codec.digest.DigestUtils;
+
+import lombok.NonNull;
+
+public class SecurityUtils
 {
-	String host = "localhost";
-	Integer port = 9001;
-	String database = "fs";
+	public static String toMD5(@NonNull final String s) throws NoSuchAlgorithmException, UnsupportedEncodingException
+	{
+		return "MD5:" + DigestUtils.md5Hex(s);
+	}
 }
