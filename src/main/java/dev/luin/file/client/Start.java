@@ -30,10 +30,9 @@ s * Copyright 2020 E.Luinstra
  */
 package dev.luin.file.client;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.lang.management.ManagementFactory;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
@@ -55,9 +54,13 @@ import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.cxf.common.logging.LogUtils;
+import org.apache.cxf.transport.servlet.CXFServlet;
+import org.beryx.textio.TextIO;
+import org.beryx.textio.TextIoFactory;
 import org.eclipse.jetty.jmx.ConnectorServer;
 import org.eclipse.jetty.jmx.MBeanContainer;
 import org.eclipse.jetty.security.ConstraintMapping;
@@ -87,21 +90,24 @@ import org.hsqldb.server.ServiceProperties;
 import org.springframework.web.context.ContextLoaderListener;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 
-import dev.luin.file.client.common.SecurityUtils;
 import dev.luin.file.client.core.security.KeyStoreType;
+import dev.luin.file.client.core.server.servlet.ClientCertificateManagerFilter;
+import dev.luin.file.client.core.server.servlet.Health;
+import dev.luin.file.client.core.service.servlet.ClientCertificateAuthenticationFilter;
 import dev.luin.file.client.web.configuration.JdbcURL;
 import lombok.AccessLevel;
 import lombok.val;
 import lombok.experimental.FieldDefaults;
 
 @FieldDefaults(level=AccessLevel.PRIVATE, makeFinal=true)
-public class Start
+public class Start implements SystemInterface
 {
 	String DEFAULT_KEYSTORE_TYPE = KeyStoreType.PKCS12.name();
 	String DEFAULT_KEYSTORE_FILE = "keystore.p12";
 	String DEFAULT_KEYSTORE_PASSWORD = "password";
 	String REALM = "Realm";
 	String REALM_FILE = "realm.properties";
+	TextIO textIO = TextIoFactory.getTextIO();
 
 	public static void main(String[] args) throws Exception
 	{
@@ -117,25 +123,24 @@ public class Start
 		if (cmd.hasOption("h"))
 			printUsage(options);
 		init(cmd);
-		
 		val server = new Server();
 		val handlerCollection = new ContextHandlerCollection();
 		server.setHandler(handlerCollection);
-
 		val properties = getProperties();
 		startHSQLDB(cmd,properties);
-		initWebServer(cmd,server);
 		initJMX(cmd,server);
-
 		try (val context = new AnnotationConfigWebApplicationContext())
 		{
 			registerConfig(context);
 			val contextLoaderListener = new ContextLoaderListener(context);
-			if (cmd.hasOption("soap") || !cmd.hasOption("headless"))
-				handlerCollection.addHandler(createWebContextHandler(cmd,contextLoaderListener));
-	
-			System.out.println("Starting web server...");
-	
+			initWebServer(cmd,server);
+			handlerCollection.addHandler(createWebContextHandler(cmd,contextLoaderListener));
+			if (cmd.hasOption("health"))
+			{
+				initHealthServer(cmd,server);
+				handlerCollection.addHandler(createHealthContextHandler(cmd,contextLoaderListener));
+			}
+			println("Starting server...");
 			try
 			{
 				server.start();
@@ -144,9 +149,9 @@ public class Start
 			{
 				e.printStackTrace();
 				server.stop();
-				System.exit(1);
+				exit(1);
 			}
-			System.out.println("Web server started.");
+			println("Server started.");
 			server.join();
 		}
 	}
@@ -158,6 +163,8 @@ public class Start
 		result.addOption("host",true,"set host");
 		result.addOption("port",true,"set port");
 		result.addOption("path",true,"set path");
+		result.addOption("health",false,"start health service");
+		result.addOption("healthPort",true,"set health service port");
 		result.addOption("connectionLimit",true,"set connection limit (default: none)");
 		result.addOption("ssl",false,"use ssl");
 		result.addOption("protocols",true,"set ssl protocols");
@@ -181,7 +188,6 @@ public class Start
 		result.addOption("jmxPasswordFile",true,"set jmx password file");
 		result.addOption("hsqldb",false,"start hsqldb server");
 		result.addOption("hsqldbDir",true,"set hsqldb location (default: hsqldb)");
-		result.addOption("soap",false,"start soap service");
 		return result;
 	}
 	
@@ -189,14 +195,14 @@ public class Start
 	{
 		val formatter = new HelpFormatter();
 		formatter.printHelp("Start",options,true);
-		System.exit(0);
+		exit(0);
 	}
 
 	protected void init(CommandLine cmd)
 	{
 		val configDir = cmd.getOptionValue("configDir","");
-		System.setProperty("configDir",configDir);
-		System.out.println("Using config directory: " + configDir);
+		setProperty("configDir",configDir);
+		println("Using config directory: " + configDir);
 	}
 
 	protected void registerConfig(AnnotationConfigWebApplicationContext context)
@@ -214,7 +220,7 @@ public class Start
 		val jdbcURL = getHsqlDbJdbcUrl(cmd,properties);
 		if (jdbcURL.isPresent())
 		{
-			System.out.println("Starting hsqldb...");
+			println("Starting hsqldb...");
 			startHSQLDBServer(cmd,jdbcURL.get());
 		}
 	}
@@ -226,8 +232,8 @@ public class Start
 			val jdbcURL = dev.luin.file.client.web.configuration.Utils.parseJdbcURL(properties.getProperty("jdbc.url"),new JdbcURL());
 			if (!jdbcURL.getHost().matches("(localhost|127.0.0.1)"))
 			{
-				System.out.println("Cannot start server on " + jdbcURL.getHost());
-				System.exit(1);
+				println("Cannot start server on " + jdbcURL.getHost());
+				exit(1);
 			}
 			return Optional.of(jdbcURL);
 		}
@@ -262,7 +268,7 @@ public class Start
 	{
 		if (cmd.hasOption("jmx"))
 		{
-			System.out.println("Starting jmx server...");
+			println("Starting jmx server...");
 			val mBeanContainer = new MBeanContainer(ManagementFactory.getPlatformMBeanServer());
 			server.addBean(mBeanContainer);
 			server.addBean(Log.getLog());
@@ -270,7 +276,7 @@ public class Start
 			//val sslContextFactory = cmd.hasOption("ssl") ? createSslContextFactory(cmd,false) : null;
 			val jmxServer = new ConnectorServer(jmxURL,createEnv(cmd),"org.eclipse.jetty.jmx:name=rmiconnectorserver");//,sslContextFactory);
 			server.addBean(jmxServer);
-			System.out.println("Jmx server configured on " + jmxURL);
+			println("Jmx server configured on " + jmxURL);
 		}
 	}
 
@@ -299,10 +305,7 @@ public class Start
 		result.setHost(cmd.getOptionValue("host") == null ? "0.0.0.0" : cmd.getOptionValue("host"));
 		result.setPort(cmd.getOptionValue("port") == null ? 8080 : Integer.parseInt(cmd.getOptionValue("port")));
 		result.setName("web");
-		if (!cmd.hasOption("headless"))
-			System.out.println("Web server configured on http://" + getHost(result.getHost()) + ":" + result.getPort() + getPath(cmd));
-		if (cmd.hasOption("soap"))
-			System.out.println("SOAP service configured on http://" + getHost(result.getHost()) + ":" + result.getPort() + "/service");
+		println("SOAP service configured on http://" + getHost(result.getHost()) + ":" + result.getPort() + "/service");
 		return result;
 	}
 
@@ -324,7 +327,7 @@ public class Start
 		val keyStore = getResource(keyStorePath);
 		if (keyStore != null && keyStore.exists())
 		{
-			System.out.println("Using keyStore " + keyStore.getURI());
+			println("Using keyStore " + keyStore.getURI());
 			String protocols = cmd.getOptionValue("protocols");
 			if (!StringUtils.isEmpty(protocols))
 				sslContextFactory.setIncludeProtocols(StringUtils.stripAll(StringUtils.split(protocols,',')));
@@ -337,8 +340,8 @@ public class Start
 		}
 		else
 		{
-			System.out.println("Web server not available: keyStore " + keyStorePath + " not found!");
-			System.exit(1);
+			println("Web server not available: keyStore " + keyStorePath + " not found!");
+			exit(1);
 		}
 	}
 
@@ -350,7 +353,7 @@ public class Start
 		val trustStore = getResource(trustStorePath);
 		if (trustStore != null && trustStore.exists())
 		{
-			System.out.println("Using trustStore " + trustStore.getURI());
+			println("Using trustStore " + trustStore.getURI());
 			sslContextFactory.setNeedClientAuth(true);
 			sslContextFactory.setTrustStoreType(trustStoreType);
 			sslContextFactory.setTrustStoreResource(trustStore);
@@ -358,8 +361,8 @@ public class Start
 		}
 		else
 		{
-			System.out.println("Web server not available: trustStore " + trustStorePath + " not found!");
-			System.exit(1);
+			println("Web server not available: trustStore " + trustStorePath + " not found!");
+			exit(1);
 		}
 	}
 
@@ -371,10 +374,7 @@ public class Start
 		connector.setHost(cmd.getOptionValue("host") == null ? "0.0.0.0" : cmd.getOptionValue("host"));
 		connector.setPort(cmd.getOptionValue("port") == null ? 8443 : Integer.parseInt(cmd.getOptionValue("port")));
 		connector.setName("web");
-		if (!cmd.hasOption("headless"))
-			System.out.println("Web server configured on https://" + getHost(connector.getHost()) + ":" + connector.getPort() + getPath(cmd));
-		if (cmd.hasOption("soap"))
-			System.out.println("SOAP service configured on https://" + getHost(connector.getHost()) + ":" + connector.getPort() + "/service");
+		println("SOAP service configured on https://" + getHost(connector.getHost()) + ":" + connector.getPort() + "/service");
 		return connector;
 	}
 
@@ -393,10 +393,10 @@ public class Start
 		{
 			if (!cmd.hasOption("clientAuthentication"))
 			{
-				System.out.println("Configuring web server basic authentication:");
+				println("Configuring web server basic authentication:");
 				val file = new File(REALM_FILE);
 				if (file.exists())
-					System.out.println("Using file " + file.getAbsoluteFile());
+					println("Using file " + file.getAbsoluteFile());
 				else
 					createRealmFile(file);
 				result.setSecurityHandler(getSecurityHandler());
@@ -407,8 +407,7 @@ public class Start
 				result.addFilter(createClientCertificateAuthenticationFilterHolder(cmd),"/*",EnumSet.of(DispatcherType.REQUEST,DispatcherType.ERROR));
 			}
 		}
-		if (cmd.hasOption("soap"))
-			result.addServlet(org.apache.cxf.transport.servlet.CXFServlet.class,"/service/*");
+		result.addServlet(CXFServlet.class,"/service/*");
 		result.setErrorHandler(createErrorHandler());
 		result.addEventListener(contextLoaderListener);
 		return result;
@@ -416,31 +415,35 @@ public class Start
 
 	protected void createRealmFile(File file) throws IOException, NoSuchAlgorithmException
 	{
-		val reader = new BufferedReader(new InputStreamReader(System.in));
-		val username = readLine("enter username: ",reader);
-		val password = readPassword(reader);
-		System.out.println("Writing to file: " + file.getAbsoluteFile());
+		val username = textIO.newStringInputReader()
+				.withDefaultValue("admin")
+				.read("enter username");
+		val password = readPassword();
+		println("Writing to file: " + file.getAbsoluteFile());
 		FileUtils.writeStringToFile(file,username + ": " + password + ",user",Charset.defaultCharset(),false);
 	}
 
-	protected String readLine(String prompt, BufferedReader reader) throws IOException
+	private String readPassword() throws IOException, NoSuchAlgorithmException
 	{
-		return reader.lines().filter(l -> StringUtils.isNotBlank(l)).findFirst().orElse(null);
-	}
-
-	protected String readPassword(BufferedReader reader) throws IOException, NoSuchAlgorithmException
-	{
+		val reader = textIO.newStringInputReader()
+				.withMinLength(8)
+				.withInputMasking(true);
 		while (true)
 		{
-			val result = SecurityUtils.toMD5(readLine("enter password: ",reader));
-			String password = SecurityUtils.toMD5(readLine("re-enter password: ",reader));
-			if (!result.equals(password))
-				System.out.println("Passwords do not match! Try again.");
-			else
+			val result = toMD5(reader.read("enter password"));
+			val password = toMD5(reader.read("re-enter password"));
+			if (result.equals(password))
 				return result;
+			else
+				println("Passwords don't match! Try again.");
 		}
 	}
 	
+	private String toMD5(String s) throws NoSuchAlgorithmException, UnsupportedEncodingException
+	{
+		return "MD5:" + DigestUtils.md5Hex(s);
+	}
+
 	protected SecurityHandler getSecurityHandler()
 	{
 		val result = new ConstraintSecurityHandler();
@@ -471,20 +474,20 @@ public class Start
 
 	protected FilterHolder createClientCertificateManagerFilterHolder(CommandLine cmd)
 	{
-		val result = new FilterHolder(dev.luin.file.client.core.server.servlet.ClientCertificateManagerFilter.class); 
+		val result = new FilterHolder(ClientCertificateManagerFilter.class); 
 		result.setInitParameter("x509CertificateHeader",cmd.getOptionValue("clientCertificateHeader"));
 		return result;
 	}
 
 	protected FilterHolder createClientCertificateAuthenticationFilterHolder(CommandLine cmd) throws MalformedURLException, IOException
 	{
-		System.out.println("Configuring web server client certificate authentication:");
-		val result = new FilterHolder(dev.luin.file.client.core.service.servlet.ClientCertificateAuthenticationFilter.class); 
+		println("Configuring web server client certificate authentication:");
+		val result = new FilterHolder(ClientCertificateAuthenticationFilter.class); 
 		val clientTrustStoreType = cmd.getOptionValue("clientTrustStoreType",DEFAULT_KEYSTORE_TYPE);
 		val clientTrustStorePath = cmd.getOptionValue("clientTrustStorePath");
 		val clientTrustStorePassword = cmd.getOptionValue("clientTrustStorePassword");
 		val trustStore = getResource(clientTrustStorePath);
-		System.out.println("Using clientTrustStore " + trustStore.getURI());
+		println("Using clientTrustStore " + trustStore.getURI());
 		if (trustStore != null && trustStore.exists())
 		{
 			result.setInitParameter("trustStoreType",clientTrustStoreType);
@@ -494,8 +497,8 @@ public class Start
 		}
 		else
 		{
-			System.out.println("Web server not available: clientTrustStore " + clientTrustStorePath + " not found!");
-			System.exit(1);
+			println("Web server not available: clientTrustStore " + clientTrustStorePath + " not found!");
+			exit(1);
 			return null;
 		}
 	}
@@ -511,8 +514,34 @@ public class Start
 
 	protected FilterHolder createClientCertificateManagerFilterHolder(Properties properties)
 	{
-		val result = new FilterHolder(dev.luin.file.client.core.server.servlet.ClientCertificateManagerFilter.class); 
+		val result = new FilterHolder(ClientCertificateManagerFilter.class); 
 		result.setInitParameter("x509CertificateHeader",properties.getProperty("server.clientCertificateHeader"));
+		return result;
+	}
+
+	protected void initHealthServer(CommandLine cmd, Server server) throws MalformedURLException, IOException
+	{
+		val connector = createHealthConnector(cmd, server);
+		server.addConnector(connector);
+	}
+
+	private ServerConnector createHealthConnector(CommandLine cmd, Server server)
+	{
+		val result = new ServerConnector(server);
+		result.setHost(cmd.getOptionValue("host","0.0.0.0"));
+		result.setPort(Integer.parseInt(cmd.getOptionValue("healthPort","8008")));
+		result.setName("health");
+		println("Health service configured on http://" + getHost(result.getHost()) + ":" + result.getPort() + "/health");
+		return result;
+	}
+
+	protected ServletContextHandler createHealthContextHandler(CommandLine cmd, ContextLoaderListener contextLoaderListener) throws Exception
+	{
+		val result = new ServletContextHandler(ServletContextHandler.SESSIONS);
+		result.setVirtualHosts(new String[] {"@health"});
+		result.setInitParameter("configuration","deployment");
+		result.setContextPath("/");
+		result.addServlet(Health.class,"/health/*");
 		return result;
 	}
 
