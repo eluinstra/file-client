@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package dev.luin.file.client.web.configuration;
+package dev.luin.file.client;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
