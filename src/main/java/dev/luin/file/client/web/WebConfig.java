@@ -58,7 +58,7 @@ public class WebConfig
 		return result;
 	}
 
-	private Endpoint publishEndpoint(Object service, String address, String namespaceUri, String serviceName, String endpointName)
+	protected Endpoint publishEndpoint(Object service, String address, String namespaceUri, String serviceName, String endpointName)
 	{
 		val result = new EndpointImpl(cxf(),service);
 		result.setAddress(address);

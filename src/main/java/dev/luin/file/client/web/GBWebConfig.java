@@ -22,11 +22,11 @@ import javax.xml.ws.soap.SOAPBinding;
 
 import org.apache.cxf.bus.spring.SpringBus;
 import org.apache.cxf.ext.logging.LoggingFeature;
-import org.apache.cxf.jaxws.EndpointImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import dev.luin.digikoppeling.gb.client.service.GBService;
 import dev.luin.file.client.core.service.FileService;
 import lombok.AccessLevel;
 import lombok.val;
@@ -34,17 +34,25 @@ import lombok.experimental.FieldDefaults;
 
 @Configuration
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class GBWebConfig
+public class GBWebConfig extends WebConfig
 {
 	@Autowired
 	FileService fileService;
+	@Autowired
+	GBService gbService;
 
 	@Bean
 	public Endpoint fileServiceEndpoint()
 	{
-		val result = publishEndpoint(fileService,"/file");
+		val result = publishEndpoint(fileService,"/file","http://luin.dev/file/client/1.0","FileService","FileServicePort");
 		((SOAPBinding)result.getBinding()).setMTOMEnabled(true);
 		return result;
+	}
+
+	@Bean
+	public Endpoint gbServiceEndpoint()
+	{
+		return publishEndpoint(gbService,"/gb","http://luin.dev/digikoppeling/client/gb/1.0","GBService","GBServicePort");
 	}
 
 	@Bean
@@ -54,14 +62,6 @@ public class GBWebConfig
 		val f = new LoggingFeature();
 		f.setPrettyLogging(true);
 		result.setFeatures(Collections.singletonList(f));
-		return result;
-	}
-
-	private Endpoint publishEndpoint(Object service, String address)
-	{
-		val result = new EndpointImpl(cxf(),service);
-		result.setAddress(address);
-		result.publish();
 		return result;
 	}
 }
