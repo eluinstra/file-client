@@ -7,6 +7,7 @@ hooks
 .#*
 *.jar
 *.log
+*.svg
 *.vgc
 /.settings
 /.classpath
@@ -16,6 +17,7 @@ hooks
 dependency-reduced-pom.xml
 /hsqldb
 /files
+/.factorypath
 
 # IntelliJ IDEA
 .idea
