@@ -1,0 +1,17 @@
+@startuml
+right footer FileClient Deployment Diagram
+
+[Application]
+[FileClient]
+file "file-client.properties" as file.properties
+folder FileSystem
+database "FileClient\nDatabase" as Database
+cloud cloud
+
+Application -right-> FileClient : SOAP/HTTPS
+FileClient -up-> file.properties
+FileClient -right-> cloud : HTTPS
+FileClient --> FileSystem : FILE
+FileClient --> Database : JDBC
+
+@enduml
