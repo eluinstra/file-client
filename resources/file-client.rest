@@ -1,0 +1,99 @@
+### Files
+
+### uploadFile
+
+POST http://localhost:8000/service/rest/v1/files/upload/
+Content-Type: multipart/form-data; boundary=-=cTIBJ6SPK7J5=-
+
+---=cTIBJ6SPK7J5=-
+Content-Disposition: form-data; name="creationUrl"
+Content-Type: text/plain
+
+https://localhost:8443/files/upload
+---=cTIBJ6SPK7J5=-
+Content-Disposition: form-data; name="file"; filename="Mauris nisl.txt"
+Content-Type: text/plain
+Content-Transfer-Encoding: base64
+
+TWF1cmlzIG5pc2wgdmVsaXQsIGVsZWlmZW5kIGVnZXQgaXBzdW0gdml0YWUsIGhlbmRyZXJpdCB2YXJpdXMgZG9sb3IuIEV0aWFtIHRlbXB1cyBxdWFtIGVuaW0sIHZlbCBjb25zZWN0ZXR1ciBlc3QgdWx0cmljZXMgYXQuIE5hbSBldCByaXN1cyBqdXN0by4gUXVpc3F1ZSBuZWMgc2VtIG5lYyBlbmltIHVsdHJpY2VzIHVsdHJpY2llcy4gRHVpcyBhYyBkaWduaXNzaW0gZmVsaXMuIEZ1c2NlIGdyYXZpZGEgdmVsaXQgYSBsaWd1bGEgcGVsbGVudGVzcXVlIGNvbnZhbGxpcy4gRG9uZWMgbHVjdHVzIGVnZXN0YXMganVzdG8gaW4gYWxpcXVldC4gVml2YW11cyBwb3J0dGl0b3IgYWxpcXVldCBuaXNpLCBldCBhbGlxdWFtIGVuaW0gdGluY2lkdW50IHZlbC4gUHJhZXNlbnQgZXUgZXVpc21vZCBleCwgZXQgdnVscHV0YXRlIHNhcGllbi4gU3VzcGVuZGlzc2UgbmVjIGxlY3R1cyB2aXRhZSBvZGlvIGVsZW1lbnR1bSBtYXR0aXMgZXUgaWQgcHVydXMuIFN1c3BlbmRpc3NlIGF1Y3RvciwgbWF1cmlzIHRpbmNpZHVudCBwb3N1ZXJlIHJob25jdXMsIG5pc2kgbGliZXJvIGludGVyZHVtIG9kaW8sIGF0IGludGVyZHVtIGRvbG9yIG51bmMgZWdldCBtYXVyaXMuIEFlbmVhbiBhIGp1c3RvIGFjIGR1aSBwdWx2aW5hciBncmF2aWRhLgoKQ3JhcyBsb2JvcnRpcyBsaWd1bGEgdXQgZXN0IGZhY2lsaXNpcywgYXQgdmFyaXVzIGVyb3Mgb3JuYXJlLiBOdWxsYSBjb25zZXF1YXQgdHJpc3RpcXVlIG1hZ25hIHF1aXMgc29sbGljaXR1ZGluLiBTdXNwZW5kaXNzZSBncmF2aWRhIGF1Z3VlIGF0IGRvbG9yIHJob25jdXMsIGEgbG9ib3J0aXMgb2RpbyBmYWNpbGlzaXMuIER1aXMgdGluY2lkdW50IGlwc3VtIGZldWdpYXQgcHVydXMgcHJldGl1bSBibGFuZGl0LiBQcmFlc2VudCBoZW5kcmVyaXQgYWxpcXVldCBxdWFtLCBuZWMgZnJpbmdpbGxhIG9kaW8gcHVsdmluYXIgYXQuIFZpdmFtdXMgdm9sdXRwYXQgbWFzc2EgdmVsIGNvbnZhbGxpcyBlZmZpY2l0dXIuIEFsaXF1YW0gZXJhdCB2b2x1dHBhdC4gTnVuYyBsZW8gdGVsbHVzLCB2ZXN0aWJ1bHVtIGNvbnNlY3RldHVyIHBvcnR0aXRvciBuZWMsIGZpbmlidXMgZXQgZXJvcy4KClZlc3RpYnVsdW0gYW50ZSBpcHN1bSBwcmltaXMgaW4gZmF1Y2lidXMgb3JjaSBsdWN0dXMgZXQgdWx0cmljZXMgcG9zdWVyZSBjdWJpbGlhIGN1cmFlOyBTZWQgaW4gbGVjdHVzIGVmZmljaXR1ciwgcGhhcmV0cmEgdGVsbHVzIHZlbCwgbGFjaW5pYSBsZW8uIEZ1c2NlIHZlaGljdWxhIHNlbSBlZ2V0IGZlbGlzIGNvbmd1ZSBwb3J0YS4gQWxpcXVhbSB1dCB0ZW1wdXMgb3JjaS4gRXRpYW0gc2VkIHB1cnVzIG5lYyBvcmNpIGx1Y3R1cyBlZmZpY2l0dXIuIEFsaXF1YW0gbGlndWxhIGFudGUsIHRlbXBvciBhIHRlbGx1cyBzaXQgYW1ldCwgbWFsZXN1YWRhIGxhb3JlZXQgbG9yZW0uIFNlZCB2ZW5lbmF0aXMgbWV0dXMgbm9uIGRpYW0gaWFjdWxpcywgdmVsIGludGVyZHVtIGp1c3RvIGx1Y3R1cy4gQ3JhcyBhIGNvbmRpbWVudHVtIG9yY2kuIEluIGhhYyBoYWJpdGFzc2UgcGxhdGVhIGRpY3R1bXN0LiBQZWxsZW50ZXNxdWUgbWFsZXN1YWRhIGp1c3RvIGFudGUsIHNpdCBhbWV0IHZpdmVycmEgZmVsaXMgdGVtcHVzIHZpdGFlLiBBZW5lYW4gbG9ib3J0aXMgdml2ZXJyYSBmZWxpcyBpbiBwb3J0YS4KCk5hbSBub24gZXN0IGNvbnZhbGxpcywgdnVscHV0YXRlIGVyYXQgdml0YWUsIHZhcml1cyB0b3J0b3IuIERvbmVjIHRlbXB1cywgb2RpbyB1dCBlZmZpY2l0dXIgcG9ydHRpdG9yLCBkdWkgbmlzbCBjb25ndWUgdHVycGlzLCBlZ2V0IHRpbmNpZHVudCBkdWkgZGlhbSBldSBkaWFtLiBWaXZhbXVzIGF1Y3RvciBlc3QgdmVsIGxpZ3VsYSB0aW5jaWR1bnQgbG9ib3J0aXMuIEluIGhhYyBoYWJpdGFzc2UgcGxhdGVhIGRpY3R1bXN0LiBRdWlzcXVlIGZldWdpYXQgbWFzc2EgZXUgZW5pbSBtb2xlc3RpZSwgYmliZW5kdW0gaGVuZHJlcml0IG1pIHZlc3RpYnVsdW0uIER1aXMgdXQgb3JuYXJlIGxlby4gQ3VyYWJpdHVyIHBoYXJldHJhLCBxdWFtIG5vbiBkaWduaXNzaW0gc29kYWxlcywganVzdG8gbWkgYXVjdG9yIGFyY3UsIGluIGZpbmlidXMgYXJjdSBuaXNsIGF0IGZlbGlzLiBOYW0gcmhvbmN1cyBkaWFtIHNpdCBhbWV0IHVsdHJpY2VzIHRpbmNpZHVudC4gQWxpcXVhbSBlZ2V0IHZhcml1cyBuaWJoLgoKU2VkIG1hZ25hIHRlbGx1cywgYWNjdW1zYW4gcXVpcyBtYXR0aXMgaW4sIGZldWdpYXQgdXQgZWxpdC4gTWF1cmlzIHF1aXMgYW50ZSBlZ2V0IG1ldHVzIHBvc3VlcmUgY29udmFsbGlzLiBJbnRlcmR1bSBldCBtYWxlc3VhZGEgZmFtZXMgYWMgYW50ZSBpcHN1bSBwcmltaXMgaW4gZmF1Y2lidXMuIEV0aWFtIHZlbmVuYXRpcyB2ZWwgZXN0IHZpdGFlIHBsYWNlcmF0LiBEdWlzIGJpYmVuZHVtIHBvcnR0aXRvciB0ZWxsdXMgZWdldCBtYXR0aXMuIE1vcmJpIGVnZXQgdHJpc3RpcXVlIGVsaXQuIFBoYXNlbGx1cyBydXRydW0gYWxpcXVldCBleCwgaWQgcHJldGl1bSBzYXBpZW4gYmxhbmRpdCBzZWQuIEludGVnZXIgbWF0dGlzLCB1cm5hIHF1aXMgc3VzY2lwaXQgc2NlbGVyaXNxdWUsIGFudGUgZmVsaXMgY29uc2VxdWF0IGV4LCBpbiBwZWxsZW50ZXNxdWUgZmVsaXMgbnVsbGEgYSBsaWJlcm8uIEV0aWFtIHRyaXN0aXF1ZSBtZXR1cyBxdWlzIG51bmMgcmhvbmN1cyBydXRydW0uIFF1aXNxdWUgcXVpcyBxdWFtIGFjIGV4IGJsYW5kaXQgY29tbW9kby4gQ3VyYWJpdHVyIGZldWdpYXQgY29tbW9kbyBzb2RhbGVzLiBQcm9pbiBpZCBuZXF1ZSBub24gdXJuYSBmcmluZ2lsbGEgY29uZ3VlLiA=
+---=cTIBJ6SPK7J5=---
+
+### getUploadTask
+
+GET http://localhost:8000/service/rest/v1/files/upload/?
+
+### getUploadTasks All
+
+GET http://localhost:8000/service/rest/v1/files/upload
+
+### getUploadTasks CREATED
+
+GET http://localhost:8000/service/rest/v1/files/upload?status=%5BCREATED%5D
+
+### getUploadTasks SUCCEEDED
+
+GET http://localhost:8000/service/rest/v1/files/upload?status=%5BSUCCEEDED%5D
+
+### getUploadTasks FAILED
+
+GET http://localhost:8000/service/rest/v1/files/upload?status=%5BFAILED%5D
+
+### deleteUploadTask
+
+DELETE http://localhost:8000/service/rest/v1/files/upload/?
+
+### downloadFile
+
+POST http://localhost:8000/service/rest/v1/files/download
+Content-Type: multipart/form-data; boundary=-=cTIBJ6SPK7J5=-
+
+---=cTIBJ6SPK7J5=-
+Content-Disposition: form-data; name="url"
+Content-Type: text/plain
+
+https://localhost:8443/files/download/?
+---=cTIBJ6SPK7J5=---
+
+### getDownloadTask
+
+GET http://localhost:8000/service/rest/v1/files/download/?
+
+### getDownloadTasks All
+
+GET http://localhost:8000/service/rest/v1/files/download
+
+### getDownloadTasks CREATED
+
+GET http://localhost:8000/service/rest/v1/files/download?status=%5BCREATED%5D
+
+### getDownloadTasks SUCCEEDED
+
+GET http://localhost:8000/service/rest/v1/files/download?status=%5BSUCCEEDED%5D
+
+### getDownloadTasks FAILED
+
+GET http://localhost:8000/service/rest/v1/files/download?status=%5BFAILED%5D
+
+### deleteUploadTask
+
+DELETE http://localhost:8000/service/rest/v1/files/download/?
+
+### getFile
+
+GET http://localhost:8000/service/rest/v1/files/?
+
+### getFileInfo
+
+GET http://localhost:8000/service/rest/v1/files/?/info
+
+### getFiles
+
+GET http://localhost:8000/service/rest/v1/files
+
+### GB
+
+### getExternalDataReference
+
+GET http://localhost:8000/service/rest/v1/gb/externalDataReference/?
+
+###
