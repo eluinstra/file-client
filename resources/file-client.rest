@@ -2,7 +2,7 @@
 
 ### uploadFile
 
-POST http://localhost:8000/service/rest/v1/files/upload/
+POST http://localhost:8000/service/rest/v1/files/upload
 Content-Type: multipart/form-data; boundary=-=cTIBJ6SPK7J5=-
 
 ---=cTIBJ6SPK7J5=-
@@ -28,15 +28,15 @@ GET http://localhost:8000/service/rest/v1/files/upload
 
 ### getUploadTasks CREATED
 
-GET http://localhost:8000/service/rest/v1/files/upload?status=%5BCREATED%5D
+GET http://localhost:8000/service/rest/v1/files/upload?status=CREATED
 
 ### getUploadTasks SUCCEEDED
 
-GET http://localhost:8000/service/rest/v1/files/upload?status=%5BSUCCEEDED%5D
+GET http://localhost:8000/service/rest/v1/files/upload?status=SUCCEEDED
 
 ### getUploadTasks FAILED
 
-GET http://localhost:8000/service/rest/v1/files/upload?status=%5BFAILED%5D
+GET http://localhost:8000/service/rest/v1/files/upload?status=FAILED
 
 ### deleteUploadTask
 
@@ -64,15 +64,15 @@ GET http://localhost:8000/service/rest/v1/files/download
 
 ### getDownloadTasks CREATED
 
-GET http://localhost:8000/service/rest/v1/files/download?status=%5BCREATED%5D
+GET http://localhost:8000/service/rest/v1/files/download?status=CREATED
 
 ### getDownloadTasks SUCCEEDED
 
-GET http://localhost:8000/service/rest/v1/files/download?status=%5BSUCCEEDED%5D
+GET http://localhost:8000/service/rest/v1/files/download?status=SUCCEEDED
 
 ### getDownloadTasks FAILED
 
-GET http://localhost:8000/service/rest/v1/files/download?status=%5BFAILED%5D
+GET http://localhost:8000/service/rest/v1/files/download?status=FAILED
 
 ### deleteUploadTask
 
