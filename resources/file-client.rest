@@ -1,15 +1,15 @@
-### Files
+### Upload
 
 ### uploadFile
 
-POST http://localhost:8000/service/rest/v1/files/upload
+POST http://localhost:8000/service/rest/v1/upload
 Content-Type: multipart/form-data; boundary=-=cTIBJ6SPK7J5=-
 
 ---=cTIBJ6SPK7J5=-
 Content-Disposition: form-data; name="creationUrl"
 Content-Type: text/plain
 
-https://localhost:8443/files/upload
+https://localhost:8443/upload
 ---=cTIBJ6SPK7J5=-
 Content-Disposition: form-data; name="file"; filename="Mauris nisl.txt"
 Content-Type: text/plain
@@ -20,63 +20,67 @@ TWF1cmlzIG5pc2wgdmVsaXQsIGVsZWlmZW5kIGVnZXQgaXBzdW0gdml0YWUsIGhlbmRyZXJpdCB2YXJp
 
 ### getUploadTask
 
-GET http://localhost:8000/service/rest/v1/files/upload/?
+GET http://localhost:8000/service/rest/v1/upload/?
 
 ### getUploadTasks All
 
-GET http://localhost:8000/service/rest/v1/files/upload
+GET http://localhost:8000/service/rest/v1/upload
 
 ### getUploadTasks CREATED
 
-GET http://localhost:8000/service/rest/v1/files/upload?status=CREATED
+GET http://localhost:8000/service/rest/v1/upload?status=CREATED
 
 ### getUploadTasks SUCCEEDED
 
-GET http://localhost:8000/service/rest/v1/files/upload?status=SUCCEEDED
+GET http://localhost:8000/service/rest/v1/upload?status=SUCCEEDED
 
 ### getUploadTasks FAILED
 
-GET http://localhost:8000/service/rest/v1/files/upload?status=FAILED
+GET http://localhost:8000/service/rest/v1/upload?status=FAILED
 
 ### deleteUploadTask
 
-DELETE http://localhost:8000/service/rest/v1/files/upload/?
+DELETE http://localhost:8000/service/rest/v1/upload/?
+
+### Download
 
 ### downloadFile
 
-POST http://localhost:8000/service/rest/v1/files/download
+POST http://localhost:8000/service/rest/v1/download
 Content-Type: multipart/form-data; boundary=-=cTIBJ6SPK7J5=-
 
 ---=cTIBJ6SPK7J5=-
 Content-Disposition: form-data; name="url"
 Content-Type: text/plain
 
-https://localhost:8443/files/download/?
+https://localhost:8443/download/?
 ---=cTIBJ6SPK7J5=---
 
 ### getDownloadTask
 
-GET http://localhost:8000/service/rest/v1/files/download/?
+GET http://localhost:8000/service/rest/v1/download/?
 
 ### getDownloadTasks All
 
-GET http://localhost:8000/service/rest/v1/files/download
+GET http://localhost:8000/service/rest/v1/download
 
 ### getDownloadTasks CREATED
 
-GET http://localhost:8000/service/rest/v1/files/download?status=CREATED
+GET http://localhost:8000/service/rest/v1/download?status=CREATED
 
 ### getDownloadTasks SUCCEEDED
 
-GET http://localhost:8000/service/rest/v1/files/download?status=SUCCEEDED
+GET http://localhost:8000/service/rest/v1/download?status=SUCCEEDED
 
 ### getDownloadTasks FAILED
 
-GET http://localhost:8000/service/rest/v1/files/download?status=FAILED
+GET http://localhost:8000/service/rest/v1/download?status=FAILED
 
-### deleteUploadTask
+### deleteDownloadTask
 
-DELETE http://localhost:8000/service/rest/v1/files/download/?
+DELETE http://localhost:8000/service/rest/v1/download/?
+
+### Files
 
 ### getFile
 

@@ -1,0 +1,295 @@
+openapi: '3.0.2'
+info:
+  title: File Server
+  version: '1.0'
+servers:
+  - url: http://localhost:8000/service/rest/v1
+  - url: https://localhost:8443/service/rest/v1
+
+components:
+  schemas:
+    DownloadTask:
+      type: object
+      properties:
+        fileId:
+          type: number
+        url:
+          type: string
+        startDate:
+          type: string
+          format: dateTime
+        endDate:
+          type: string
+          format: dateTime
+        timestamp:
+          type: string
+          format: dateTime
+        status:
+          $ref: '#/components/schemas/DownloadTaskStatus'
+        statusTime:
+          type: string
+          format: dateTime
+        scheduleTime:
+          type: string
+          format: dateTime
+        retries:
+          type: number
+      required:
+        - fileId
+        - url
+        - timestamp
+        - status
+        - statusTime
+        - scheduleTime
+        - retries
+    DownloadTaskStatus:
+      type: string
+      enum:
+        - CREATED
+        - SUCCEEDED
+        - FAILED
+    Error:
+      type: string
+    UploadTask:
+      type: object
+      properties:
+        fileId:
+          type: number
+        creationUrl:
+          type: string
+        timestamp:
+          type: string
+          format: dateTime
+        status:
+          $ref: '#/components/schemas/DownloadTaskStatus'
+        statusTime:
+          type: string
+          format: dateTime
+        scheduleTime:
+          type: string
+          format: dateTime
+        retries:
+          type: number
+      required:
+        - fileId
+        - creationUrl
+        - timestamp
+        - status
+        - statusTime
+        - scheduleTime
+        - retries
+    UploadTaskStatus:
+      type: string
+      enum:
+        - CREATED
+        - SUCCEEDED
+        - FAILED
+
+paths:
+  /upload:
+    post:
+      tags:
+        - "Upload"
+      description: Creates a task to upload a file
+      operationId: uploadFile
+      requestBody:
+        description: The file to upload
+        content:
+          'multipart/form-data':
+            schema:
+              type: object
+              properties:
+                creationUrl:
+                  type: string
+                sha256Checksum:
+                  type: string
+                file:
+                  type: string
+                  format: binary
+              required:
+                - "creationUrl"
+                - "file"
+      responses:
+        '200':
+          description: The upload task
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/UploadTask'
+        default:
+          description: Error
+          content:
+            'text/html':
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /upload/{id}:
+    get:
+      tags:
+        - "Upload"
+      description: Returns upload task with id id
+      operationId: getUploadTask
+      responses:
+        '200':
+          description: The upload task
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/UploadTask'
+        default:
+          description: Error
+          content:
+            'text/html':
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    delete:
+      tags:
+        - "Upload"
+      description: Delete upload task with id id
+      operationId: deleteUploadTask
+      responses:
+        '200':
+          description: OK
+        default:
+          description: Error
+          content:
+            'text/html':
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: number
+
+  /upload?status={status}:
+    get:
+      tags:
+        - "Upload"
+      description: Returns upload task with id id
+      operationId: getUploadTask
+      responses:
+        '200':
+          description: The upload task
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/UploadTask'
+        default:
+          description: Error
+          content:
+            'text/html':
+              schema:
+                $ref: '#/components/schemas/Error'
+    parameters:
+      - name: status
+        in: query
+        schema:
+          $ref: '#/components/schemas/UploadTaskStatus'
+
+  /download:
+    post:
+      tags:
+        - "Download"
+      description: Creates a task to download a file
+      operationId: downloadFile
+      requestBody:
+        description: The file to download
+        content:
+          'multipart/form-data':
+            schema:
+              type: object
+              properties:
+                creationUrl:
+                  type: string
+                sha256Checksum:
+                  type: string
+                file:
+                  type: string
+                  format: binary
+              required:
+                - "creationUrl"
+                - "file"
+      responses:
+        '200':
+          description: The download task
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/DownloadTask'
+        default:
+          description: Error
+          content:
+            'text/html':
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /download/{id}:
+    get:
+      tags:
+        - "Download"
+      description: Returns download task with id id
+      operationId: getDownloadTask
+      responses:
+        '200':
+          description: The download task
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/DownloadTask'
+        default:
+          description: Error
+          content:
+            'text/html':
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    delete:
+      tags:
+        - "Download"
+      description: Delete download task with id id
+      operationId: deleteDownloadTask
+      responses:
+        '200':
+          description: OK
+        default:
+          description: Error
+          content:
+            'text/html':
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: number
+
+  /download?status={status}:
+    get:
+      tags:
+        - "Download"
+      description: Returns download task with id id
+      operationId: getDownloadTask
+      responses:
+        '200':
+          description: The download task
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/DownloadTask'
+        default:
+          description: Error
+          content:
+            'text/html':
+              schema:
+                $ref: '#/components/schemas/Error'
+    parameters:
+      - name: status
+        in: query
+        schema:
+          $ref: '#/components/schemas/DownloadTaskStatus'

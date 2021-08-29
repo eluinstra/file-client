@@ -44,8 +44,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import dev.luin.file.client.core.service.FileService;
-import dev.luin.file.client.core.service.FileServiceImpl;
+import dev.luin.file.client.core.service.download.DownloadService;
+import dev.luin.file.client.core.service.download.DownloadServiceImpl;
+import dev.luin.file.client.core.service.file.FileService;
+import dev.luin.file.client.core.service.file.FileServiceImpl;
+import dev.luin.file.client.core.service.upload.UploadService;
+import dev.luin.file.client.core.service.upload.UploadServiceImpl;
 import lombok.AccessLevel;
 import lombok.val;
 import lombok.experimental.FieldDefaults;
@@ -55,7 +59,27 @@ import lombok.experimental.FieldDefaults;
 public class WebConfig
 {
 	@Autowired
+	UploadService uploadService;
+	@Autowired
+	DownloadService downloadService;
+	@Autowired
 	FileService fileService;
+
+	@Bean
+	public Endpoint uploadServiceEndpoint()
+	{
+		val result = publishEndpoint(uploadService,"/upload","http://luin.dev/file/client/1.0","UploadService","UploadServicePort");
+		((SOAPBinding)result.getBinding()).setMTOMEnabled(true);
+		return result;
+	}
+
+	@Bean
+	public Endpoint downloadServiceEndpoint()
+	{
+		val result = publishEndpoint(downloadService,"/download","http://luin.dev/file/client/1.0","DownloadService","DownloadServicePort");
+		((SOAPBinding)result.getBinding()).setMTOMEnabled(true);
+		return result;
+	}
 
 	@Bean
 	public Endpoint fileServiceEndpoint()
@@ -88,6 +112,18 @@ public class WebConfig
 		result.setEndpointName(new QName(namespaceUri,endpointName));
 		result.publish();
 		return result;
+	}
+
+	@Bean
+	public Server createUploadJAXRSServer()
+	{
+		return createJAXRSServer(UploadServiceImpl.class,uploadService,"/upload");
+	}
+
+	@Bean
+	public Server createDownloadJAXRSServer()
+	{
+		return createJAXRSServer(DownloadServiceImpl.class,downloadService,"/download");
 	}
 
 	@Bean
