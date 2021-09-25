@@ -32,6 +32,7 @@ import dev.luin.file.client.core.transaction.TransactionManagerConfig;
 import dev.luin.file.client.core.upload.UploadClientConfig;
 import dev.luin.file.client.web.WebConfig;
 import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import lombok.val;
 import lombok.experimental.FieldDefaults;
 
@@ -54,9 +55,10 @@ import lombok.experimental.FieldDefaults;
 		"file:${configDir}file-client.properties"},
 		ignoreResourceNotFound = true)
 @FieldDefaults(level = AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PUBLIC)
 public class AppConfig
 {
-	public static PropertySourcesPlaceholderConfigurer PROPERTY_SOURCE = propertySourcesPlaceholderConfigurer();
+	public static final PropertySourcesPlaceholderConfigurer PROPERTY_SOURCE = propertySourcesPlaceholderConfigurer();
 	
 	private static PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer()
 	{

@@ -73,7 +73,7 @@ public class HsqlDb implements SystemInterface
 	{
 		if ("org.hsqldb.jdbcDriver".equals(properties.getProperty("jdbc.driverClassName")) && cmd.hasOption(Option.HSQLDB.name))
 		{
-			val jdbcURL = getHsqlDbJdbcUrl(cmd,properties);
+			val jdbcURL = getHsqlDbJdbcUrl(properties);
 			if (jdbcURL.isPresent())
 			{
 				val server = createHSQLDBServer(cmd,jdbcURL.get());
@@ -85,7 +85,7 @@ public class HsqlDb implements SystemInterface
 		}
 	}
 
-	private Optional<JdbcURL> getHsqlDbJdbcUrl(CommandLine cmd, Properties properties) throws IOException, AclFormatException, URISyntaxException
+	private Optional<JdbcURL> getHsqlDbJdbcUrl(Properties properties) throws IOException, AclFormatException, URISyntaxException
 	{
 		val jdbcURL = JdbcURL.of(properties.getProperty("jdbc.url"));
 		val allowedHosts = "localhost|127.0.0.1";

@@ -17,8 +17,6 @@ package dev.luin.file.client.web;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.MalformedURLException;
 import java.nio.charset.Charset;
 import java.security.NoSuchAlgorithmException;
 import java.util.Collections;
@@ -157,7 +155,7 @@ public class WebAuthentication implements Config, SystemInterface
 		}
 	}
 	
-	private String toMD5(String s) throws NoSuchAlgorithmException, UnsupportedEncodingException
+	private String toMD5(String s)
 	{
 		return "MD5:" + DigestUtils.md5Hex(s);
 	}
@@ -206,7 +204,7 @@ public class WebAuthentication implements Config, SystemInterface
 		return result;
 	}
 
-	protected FilterHolder createClientCertificateAuthenticationFilterHolder(CommandLine cmd) throws MalformedURLException, IOException
+	protected FilterHolder createClientCertificateAuthenticationFilterHolder(CommandLine cmd) throws IOException
 	{
 		println("Configuring Web Server client certificate authentication:");
 		val result = new FilterHolder(ClientCertificateAuthenticationFilter.class); 
@@ -215,7 +213,7 @@ public class WebAuthentication implements Config, SystemInterface
 		val clientTrustStorePassword = cmd.getOptionValue(Option.CLIENT_TRUST_STORE_PASSWORD.name);
 		val trustStore = getResource(clientTrustStorePath);
 		println("Using clientTrustStore " + trustStore.getURI());
-		if (trustStore != null && trustStore.exists())
+		if (trustStore.exists())
 		{
 			result.setInitParameter("trustStoreType",clientTrustStoreType);
 			result.setInitParameter("trustStorePath",clientTrustStorePath);

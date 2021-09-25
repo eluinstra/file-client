@@ -16,6 +16,7 @@
 package dev.luin.file.client.web;
 
 import java.lang.management.ManagementFactory;
+import java.net.MalformedURLException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -29,13 +30,14 @@ import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.util.log.Log;
 
 import dev.luin.file.client.Config;
+import dev.luin.file.client.SystemInterface;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.val;
 import lombok.experimental.FieldDefaults;
 
-public class Jmx implements Config
+public class Jmx implements Config, SystemInterface
 {
 	@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 	@AllArgsConstructor
@@ -69,11 +71,11 @@ public class Jmx implements Config
 		return options;
 	}
 
-	public void init(CommandLine cmd, Server server) throws Exception
+	public void init(CommandLine cmd, Server server) throws NumberFormatException, MalformedURLException
 	{
 		if (cmd.hasOption(Option.JMX.name))
 		{
-			System.out.println("Starting JMX Server...");
+			println("Starting JMX Server...");
 			val mBeanContainer = new MBeanContainer(ManagementFactory.getPlatformMBeanServer());
 			server.addBean(mBeanContainer);
 			server.addBean(Log.getLog());
@@ -81,7 +83,7 @@ public class Jmx implements Config
 			//val sslContextFactory = cmd.hasOption(Option.SSL.name) ? createSslContextFactory(cmd,false) : null;
 			val jmxServer = new ConnectorServer(jmxURL,createEnv(cmd),"org.eclipse.jetty.jmx:name=rmiconnectorserver");//,sslContextFactory);
 			server.addBean(jmxServer);
-			System.out.println("JMX Server configured on " + jmxURL);
+			println("JMX Server configured on " + jmxURL);
 		}
 	}
 

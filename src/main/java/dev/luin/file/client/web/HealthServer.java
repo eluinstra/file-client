@@ -15,15 +15,11 @@
  */
 package dev.luin.file.client.web;
 
-import java.io.IOException;
-import java.net.MalformedURLException;
-
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Options;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.servlet.ServletContextHandler;
-import org.springframework.web.context.ContextLoaderListener;
 
 import dev.luin.file.client.Config;
 import dev.luin.file.client.SystemInterface;
@@ -76,7 +72,7 @@ public class HealthServer implements Config, SystemInterface
 		return options;
 	}
 
-	public void init(Server server) throws MalformedURLException, IOException
+	public void init(Server server)
 	{
 		val connector = createHealthConnector(server);
 		server.addConnector(connector);
@@ -92,7 +88,7 @@ public class HealthServer implements Config, SystemInterface
 		return result;
 	}
 
-	public ServletContextHandler createContextHandler(ContextLoaderListener contextLoaderListener) throws Exception
+	public ServletContextHandler createContextHandler()
 	{
 		val result = new ServletContextHandler(ServletContextHandler.SESSIONS);
 		result.setVirtualHosts(new String[] {"@" + HEALTH_CONNECTOR_NAME});

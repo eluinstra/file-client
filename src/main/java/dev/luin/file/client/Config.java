@@ -16,7 +16,6 @@
 package dev.luin.file.client;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
 
 import org.eclipse.jetty.util.resource.Resource;
 
@@ -31,9 +30,11 @@ public interface Config
 		return "0.0.0.0".equals(host) ? "localhost" : host;
 	}
 
-	default Resource getResource(String path) throws MalformedURLException, IOException
+	default Resource getResource(String path) throws IOException
 	{
-		val result = Resource.newResource(path);
-		return result.exists() ? result : Resource.newClassPathResource(path);
+		try (val result = Resource.newResource(path))
+		{
+			return result.exists() ? result : Resource.newClassPathResource(path);
+		}
 	}
 }

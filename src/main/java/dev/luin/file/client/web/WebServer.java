@@ -16,7 +16,6 @@
 package dev.luin.file.client.web;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Options;
@@ -103,7 +102,7 @@ public class WebServer implements Config, SystemInterface
 		return options;
 	}
 
-	public void init(Server server) throws MalformedURLException, IOException
+	public void init(Server server) throws IOException
 	{
 		val connector = isSSLEnabled()
 				? createHttpsConnector(cmd,server,createSslContextFactory())
@@ -127,7 +126,7 @@ public class WebServer implements Config, SystemInterface
 		return cmd.getOptionValue(Option.PATH.name) == null ? DefaultValue.PATH.value : cmd.getOptionValue(Option.PATH.name);
 	}
 
-	private SslContextFactory createSslContextFactory() throws MalformedURLException, IOException
+	private SslContextFactory createSslContextFactory() throws IOException
 	{
 		val result = new SslContextFactory.Server();
 		addKeyStore(result);
@@ -137,7 +136,7 @@ public class WebServer implements Config, SystemInterface
 		return result;
 	}
 
-	private void addKeyStore(SslContextFactory sslContextFactory) throws MalformedURLException, IOException
+	private void addKeyStore(SslContextFactory sslContextFactory) throws IOException
 	{
 		val keyStoreType = cmd.getOptionValue(Option.KEY_STORE_TYPE.name, DefaultValue.KEYSTORE_TYPE.value);
 		val keyStorePath = cmd.getOptionValue(Option.KEY_STORE_PATH.name,DefaultValue.KEYSTORE_FILE.value);
@@ -163,7 +162,7 @@ public class WebServer implements Config, SystemInterface
 		}
 	}
 
-	private void addTrustStore(SslContextFactory.Server sslContextFactory) throws MalformedURLException, IOException
+	private void addTrustStore(SslContextFactory.Server sslContextFactory) throws IOException
 	{
 		val trustStoreType = cmd.getOptionValue(Option.TRUST_STORE_TYPE.name,DefaultValue.KEYSTORE_TYPE.value);
 		val trustStorePath = cmd.getOptionValue(Option.TRUST_STORE_PATH.name);

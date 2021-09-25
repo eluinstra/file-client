@@ -140,7 +140,7 @@ public class Start implements SystemInterface
 		formatter.printHelp("Start",options,true);
 	}
 
-	private static void startService(final CommandLine cmd) throws ParseException, IOException, Exception
+	private static void startService(final CommandLine cmd) throws Exception
 	{
 		val app = Start.of(cmd);
 		app.startService();
@@ -172,7 +172,7 @@ public class Start implements SystemInterface
 		println("Using config directory: " + (StringUtils.isEmpty(configDir) ? "." : configDir));
 	}
 
-	private void initServer() throws Exception
+	private void initServer() throws IOException, AclFormatException, URISyntaxException, NoSuchAlgorithmException
 	{
 		val handlerCollection = createHandlerCollection();
 		initErrorHandler();
@@ -183,7 +183,7 @@ public class Start implements SystemInterface
 			registerConfig(context);
 			val contextLoaderListener = new ContextLoaderListener(context);
 			WebServer webServer = initWebServer(handlerCollection,contextLoaderListener);
-			initHealthServer(handlerCollection,contextLoaderListener,webServer);
+			initHealthServer(handlerCollection,webServer);
 		}
 	}
 
@@ -204,7 +204,7 @@ public class Start implements SystemInterface
 		new HsqlDb().startHSQLDB(cmd,properties);
 	}
 
-	private void initJmx() throws Exception
+	private void initJmx() throws NumberFormatException, MalformedURLException
 	{
 		new Jmx().init(cmd,server);
 	}
@@ -214,7 +214,7 @@ public class Start implements SystemInterface
 		context.register(AppConfig.class);
 	}
 
-	private WebServer initWebServer(final ContextHandlerCollection handlerCollection, final ContextLoaderListener contextLoaderListener) throws MalformedURLException, IOException, NoSuchAlgorithmException
+	private WebServer initWebServer(final ContextHandlerCollection handlerCollection, final ContextLoaderListener contextLoaderListener) throws IOException, NoSuchAlgorithmException
 	{
 		WebServer webServer = new WebServer(cmd);
 		webServer.init(server);
@@ -222,13 +222,13 @@ public class Start implements SystemInterface
 		return webServer;
 	}
 
-	private void initHealthServer(final ContextHandlerCollection handlerCollection, final ContextLoaderListener contextLoaderListener, WebServer webServer) throws MalformedURLException, IOException, Exception
+	private void initHealthServer(final ContextHandlerCollection handlerCollection, WebServer webServer) throws IOException
 	{
 		if (cmd.hasOption(HealthServer.getHealthOption()))
 		{
 			val health = new HealthServer(cmd,webServer);
 			health.init(server);
-			handlerCollection.addHandler(health.createContextHandler(contextLoaderListener));
+			handlerCollection.addHandler(health.createContextHandler());
 		}
 	}
 
