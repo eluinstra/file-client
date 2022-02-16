@@ -24,7 +24,7 @@
 	<groupId>dev.luin.file.client</groupId>
 	<artifactId>file-client</artifactId>
 	<packaging>jar</packaging>
-	<version>1.0.0-M4</version>
+	<version>1.0.0</version>
 	<name>FileClient</name>
 	<description>FileClient is a file upload and download client for FileServer</description>
 	<url>git@github.com:eluinstra/file-client.git</url>
@@ -203,12 +203,12 @@
 		<dependency>
 			<groupId>dev.luin.file.client</groupId>
 			<artifactId>file-client-core</artifactId>
-			<version>1.0.0-M4</version>
+			<version>1.0.0</version>
 		</dependency>
 		<dependency>
 			<groupId>dev.luin.digikoppeling.gb</groupId>
 			<artifactId>gb-client</artifactId>
-			<version>1.0.0-M4</version>
+			<version>1.0.0</version>
 		</dependency>
 		<dependency>
 			<groupId>org.flywaydb</groupId>
@@ -240,7 +240,7 @@
 		<dependency>
 			<groupId>org.postgresql</groupId>
 			<artifactId>postgresql</artifactId>
-			<version>42.3.1</version>
+			<version>42.3.3</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
