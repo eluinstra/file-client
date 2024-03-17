@@ -15,13 +15,6 @@
  */
 package dev.luin.file.client;
 
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.FileSystemResource;
-import org.springframework.core.io.Resource;
-
 import dev.luin.digikoppeling.gb.client.service.GBServiceConfig;
 import dev.luin.file.client.core.datasource.DataSourceConfig;
 import dev.luin.file.client.core.download.DownloadClientConfig;
@@ -34,45 +27,35 @@ import dev.luin.file.client.core.upload.UploadClientConfig;
 import dev.luin.file.client.web.GBWebConfig;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import lombok.val;
 import lombok.experimental.FieldDefaults;
+import lombok.val;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
 
 @Configuration
-@Import({
-	DataSourceConfig.class,
-	DownloadClientConfig.class,
-	FileSystemConfig.class,
-	GBServiceConfig.class,
-	GBWebConfig.class,
-	KeyStoreConfig.class,
-	QueryDSLConfig.class,
-	ServiceConfig.class,
-	TransactionManagerConfig.class,
-	UploadClientConfig.class
-})
-@PropertySource(value = {
-		"classpath:dev/luin/file/client/core/default.properties",
-		"classpath:dev/luin/digikoppeling/gb/client/default.properties",
-		"classpath:dev/luin/file/client/default.properties",
-		"file:${configDir}file-client.advanced.properties",
-		"file:${configDir}file-client.properties"},
+@Import({DataSourceConfig.class, DownloadClientConfig.class, FileSystemConfig.class, GBServiceConfig.class, GBWebConfig.class, KeyStoreConfig.class,
+		QueryDSLConfig.class, ServiceConfig.class, TransactionManagerConfig.class, UploadClientConfig.class})
+@PropertySource(
+		value = {"classpath:dev/luin/file/client/core/default.properties", "classpath:dev/luin/digikoppeling/gb/client/default.properties",
+				"classpath:dev/luin/file/client/default.properties", "file:${configDir}file-client.advanced.properties", "file:${configDir}file-client.properties"},
 		ignoreResourceNotFound = true)
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PUBLIC)
 public class GBAppConfig
 {
 	public static final PropertySourcesPlaceholderConfigurer PROPERTY_SOURCE = propertySourcesPlaceholderConfigurer();
-	
+
 	private static PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer()
 	{
 		val result = new PropertySourcesPlaceholderConfigurer();
 		val configDir = System.getProperty("server.configDir");
-		val resources = new Resource[]{
-				new ClassPathResource("dev/luin/file/client/core/default.properties"),
-				new ClassPathResource("dev/luin/digikoppeling/gb/client/default.properties"),
-				new ClassPathResource("dev/luin/file/client/default.properties"),
-				new FileSystemResource(configDir + "file-client.advanced.properties"),
-				new FileSystemResource(configDir + "file-client.properties")};
+		val resources = new Resource[]{new ClassPathResource("dev/luin/file/client/core/default.properties"),
+				new ClassPathResource("dev/luin/digikoppeling/gb/client/default.properties"), new ClassPathResource("dev/luin/file/client/default.properties"),
+				new FileSystemResource(configDir + "file-client.advanced.properties"), new FileSystemResource(configDir + "file-client.properties")};
 		result.setLocations(resources);
 		result.setIgnoreResourceNotFound(true);
 		return result;
