@@ -9,7 +9,7 @@ Content-Type: multipart/form-data; boundary=-=cTIBJ6SPK7J5=-
 Content-Disposition: form-data; name="creationUrl"
 Content-Type: text/plain
 
-https://localhost:8443/upload
+https://localhost:8443/files/upload
 ---=cTIBJ6SPK7J5=-
 Content-Disposition: form-data; name="file"; filename="Mauris nisl.txt"
 Content-Type: text/plain
@@ -53,7 +53,7 @@ Content-Type: multipart/form-data; boundary=-=cTIBJ6SPK7J5=-
 Content-Disposition: form-data; name="url"
 Content-Type: text/plain
 
-https://localhost:8443/download/?
+https://localhost:8443/files/download/?
 ---=cTIBJ6SPK7J5=---
 
 ### getDownloadTask
