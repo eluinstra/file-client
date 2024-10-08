@@ -30,6 +30,7 @@ s * Copyright 2020 E.Luinstra
  */
 package dev.luin.file.client;
 
+import dev.luin.file.client.core.PluginProvider;
 import dev.luin.file.client.web.HealthServer;
 import dev.luin.file.client.web.HsqlDb;
 import dev.luin.file.client.web.Jmx;
@@ -39,7 +40,10 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.security.NoSuchAlgorithmException;
+import java.util.List;
 import java.util.Properties;
+import java.util.stream.Collectors;
+
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -209,6 +213,17 @@ public class Start implements SystemInterface
 	protected void registerConfig(AnnotationConfigWebApplicationContext context)
 	{
 		context.register(AppConfig.class);
+		getPluginConfigClasses().forEach(context::register);
+		context.refresh();
+	}
+
+	protected List<Class<?>> getPluginConfigClasses()
+	{
+		return PluginProvider.get()
+				.stream()
+				.filter(p -> p.getSpringConfigurationClass() != null)
+				.map(PluginProvider::getSpringConfigurationClass)
+				.collect(Collectors.toList());
 	}
 
 	private WebServer initWebServer(final ContextHandlerCollection handlerCollection, final ContextLoaderListener contextLoaderListener)
