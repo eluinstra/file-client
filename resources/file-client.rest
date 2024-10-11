@@ -2,7 +2,7 @@
 
 ### uploadFile
 
-POST http://localhost:8000/service/rest/v1/upload
+POST https://localhost:8000/service/rest/v1/upload
 Content-Type: multipart/form-data; boundary=-=cTIBJ6SPK7J5=-
 
 ---=cTIBJ6SPK7J5=-
@@ -20,33 +20,33 @@ TWF1cmlzIG5pc2wgdmVsaXQsIGVsZWlmZW5kIGVnZXQgaXBzdW0gdml0YWUsIGhlbmRyZXJpdCB2YXJp
 
 ### getUploadTask
 
-GET http://localhost:8000/service/rest/v1/upload/?
+GET https://localhost:8000/service/rest/v1/upload/?
 
 ### getUploadTasks All
 
-GET http://localhost:8000/service/rest/v1/upload
+GET https://localhost:8000/service/rest/v1/upload
 
 ### getUploadTasks CREATED
 
-GET http://localhost:8000/service/rest/v1/upload?status=CREATED
+GET https://localhost:8000/service/rest/v1/upload?status=CREATED
 
 ### getUploadTasks SUCCEEDED
 
-GET http://localhost:8000/service/rest/v1/upload?status=SUCCEEDED
+GET https://localhost:8000/service/rest/v1/upload?status=SUCCEEDED
 
 ### getUploadTasks FAILED
 
-GET http://localhost:8000/service/rest/v1/upload?status=FAILED
+GET https://localhost:8000/service/rest/v1/upload?status=FAILED
 
 ### deleteUploadTask
 
-DELETE http://localhost:8000/service/rest/v1/upload/?
+DELETE https://localhost:8000/service/rest/v1/upload/?
 
 ### Download
 
 ### downloadFile
 
-POST http://localhost:8000/service/rest/v1/download
+POST https://localhost:8000/service/rest/v1/download
 Content-Type: multipart/form-data; boundary=-=cTIBJ6SPK7J5=-
 
 ---=cTIBJ6SPK7J5=-
@@ -58,46 +58,46 @@ https://localhost:8443/files/download/?
 
 ### getDownloadTask
 
-GET http://localhost:8000/service/rest/v1/download/?
+GET https://localhost:8000/service/rest/v1/download/?
 
 ### getDownloadTasks All
 
-GET http://localhost:8000/service/rest/v1/download
+GET https://localhost:8000/service/rest/v1/download
 
 ### getDownloadTasks CREATED
 
-GET http://localhost:8000/service/rest/v1/download?status=CREATED
+GET https://localhost:8000/service/rest/v1/download?status=CREATED
 
 ### getDownloadTasks SUCCEEDED
 
-GET http://localhost:8000/service/rest/v1/download?status=SUCCEEDED
+GET https://localhost:8000/service/rest/v1/download?status=SUCCEEDED
 
 ### getDownloadTasks FAILED
 
-GET http://localhost:8000/service/rest/v1/download?status=FAILED
+GET https://localhost:8000/service/rest/v1/download?status=FAILED
 
 ### deleteDownloadTask
 
-DELETE http://localhost:8000/service/rest/v1/download/?
+DELETE https://localhost:8000/service/rest/v1/download/?
 
 ### Files
 
 ### getFile
 
-GET http://localhost:8000/service/rest/v1/files/?
+GET https://localhost:8000/service/rest/v1/files/?
 
 ### getFileInfo
 
-GET http://localhost:8000/service/rest/v1/files/?/info
+GET https://localhost:8000/service/rest/v1/files/?/info
 
 ### getFiles
 
-GET http://localhost:8000/service/rest/v1/files
+GET https://localhost:8000/service/rest/v1/files
 
 ### GB
 
 ### getExternalDataReference
 
-GET http://localhost:8000/service/rest/v1/gb/externalDataReference/?
+GET https://localhost:8000/service/rest/v1/gb/externalDataReference/?
 
 ###
