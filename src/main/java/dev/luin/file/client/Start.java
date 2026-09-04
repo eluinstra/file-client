@@ -106,7 +106,7 @@ public class Start implements SystemInterface
 	protected static Options createOptions()
 	{
 		val result = new Options();
-		Start.addOptions(result);
+		addOptions(result);
 		WebServer.addOptions(result);
 		WebAuthentication.addOptions(result);
 		HsqlDb.addOptions(result);
@@ -115,7 +115,7 @@ public class Start implements SystemInterface
 		return result;
 	}
 
-	private static void addOptions(final org.apache.commons.cli.Options result)
+	private static void addOptions(final Options result)
 	{
 		result.addOption(Option.HELP.name, false, "print this message");
 		result.addOption(Option.CONFIG_DIR.name, true, "set config directory [default: <startup_directory>]");
@@ -139,7 +139,7 @@ public class Start implements SystemInterface
 
 	private static void startService(final CommandLine cmd) throws Exception
 	{
-		val app = Start.of(cmd);
+		val app = of(cmd);
 		app.startService();
 	}
 
